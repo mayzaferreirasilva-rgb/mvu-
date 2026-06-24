@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MUV - Movimento Uniformemente Variado</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
+}
+
+body{
+background:#f4f7fb;
+color:#333;
+}
+
+header{
+background:linear-gradient(135deg,#0057b8,#00a2ff);
+color:white;
+padding:30px;
+text-align:center;
+}
+
+section{
+padding:40px;
+max-width:1200px;
+margin:auto;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:15px;
+box-shadow:0 4px 10px rgba(0,0,0,.1);
+margin-bottom:30px;
+}
+
+h2{
+color:#0057b8;
+margin-bottom:15px;
+}
+
+.mapa{
+display:flex;
+justify-content:center;
+align-items:center;
+flex-wrap:wrap;
+gap:20px;
+margin-top:20px;
+}
+
+.no{
+background:#0057b8;
+color:white;
+padding:15px;
+border-radius:10px;
+cursor:pointer;
+transition:.3s;
+}
+
+.no:hover{
+transform:scale(1.08);
+background:#0084ff;
+}
+
+.info{
+display:none;
+margin-top:10px;
+background:#eef6ff;
+padding:15px;
+border-radius:10px;
+}
+
+input{
+padding:10px;
+margin:5px;
+width:120px;
+}
+
+button{
+padding:10px 20px;
+background:#0057b8;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+button:hover{
+background:#0084ff;
+}
+
+.resultado{
+margin-top:15px;
+font-weight:bold;
+}
+
+canvas{
+background:white;
+border-radius:10px;
+margin-top:20px;
+border:1px solid #ddd;
+}
+
+footer{
+text-align:center;
+padding:20px;
+background:#0057b8;
+color:white;
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>Movimento Uniformemente Variado (MUV)</h1>
+<p>Site Teórico e Interativo de Física</p>
+</header>
+
+<section>
+
+<div class="card">
+<h2>O que é MUV?</h2>
+
+<p>
+O Movimento Uniformemente Variado é um movimento em que a aceleração permanece constante.
+Isso faz com que a velocidade aumente ou diminua uniformemente ao longo do tempo.
+</p>
+
+<br>
+
+<h3>Principais Fórmulas</h3>
+
+<p><b>v = v₀ + a·t</b></p>
+<p><b>s = s₀ + v₀·t + (a·t²)/2</b></p>
+<p><b>v² = v₀² + 2aΔs</b></p>
+
+</div>
+
+<div class="card">
+
+<h2>Mapa Conceitual Interativo</h2>
+
+<div class="mapa">
+
+<div class="no" onclick="mostrar('vel')">
+Velocidade
+</div>
+
+<div class="no" onclick="mostrar('ace')">
+Aceleração
+</div>
+
+<div class="no" onclick="mostrar('pos')">
+Posição
+</div>
+
+<div class="no" onclick="mostrar('graf')">
+Gráficos
+</div>
+
+</div>
+
+<div id="vel" class="info">
+A velocidade varia continuamente durante o MUV.
+</div>
+
+<div id="ace" class="info">
+A aceleração permanece constante.
+</div>
+
+<div id="pos" class="info">
+A posição varia segundo uma função do segundo grau.
+</div>
+
+<div id="graf" class="info">
+v × t → reta<br>
+s × t → parábola<br>
+a × t → linha horizontal
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Calculadora de MUV</h2>
+
+<p>Equação: v = v₀ + a·t</p>
+
+<input id="v0" placeholder="v₀">
+<input id="a" placeholder="a">
+<input id="t" placeholder="t">
+
+<button onclick="calcular()">
+Calcular
+</button>
+
+<div class="resultado" id="res"></div>
+
+</div>
+
+<div class="card">
+
+<h2>Simulação do Movimento</h2>
+
+<p>
+Ajuste os valores e observe a posição ao longo do tempo.
+</p>
+
+<input id="simV0" value="0">
+<input id="simA" value="2">
+
+<button onclick="iniciar()">
+Iniciar Simulação
+</button>
+
+<canvas id="canvas" width="900" height="200"></canvas>
+
+</div>
+
+<div class="card">
+
+<h2>Gráfico de Posição</h2>
+
+<canvas id="grafico" width="900" height="350"></canvas>
+
+<button onclick="desenharGrafico()">
+Gerar Gráfico
+</button>
+
+</div>
+
+</section>
+
+<footer>
+Projeto Educacional - Física: Movimento Uniformemente Variado
+</footer>
+
+<script>
+
+function mostrar(id){
+
+document.querySelectorAll(".info")
+.forEach(x=>x.style.display="none");
+
+document.getElementById(id).style.display="block";
+
+}
+
+function calcular(){
+
+let v0=parseFloat(document.getElementById("v0").value);
+let a=parseFloat(document.getElementById("a").value);
+let t=parseFloat(document.getElementById("t").value);
+
+let v=v0+(a*t);
+
+document.getElementById("res").innerHTML=
+"Velocidade Final = "+v.toFixed(2)+" m/s";
+
+}
+
+let canvas=document.getElementById("canvas");
+let ctx=canvas.getContext("2d");
+
+function iniciar(){
+
+let x=30;
+let tempo=0;
+
+let v0=parseFloat(document.getElementById("simV0").value);
+let a=parseFloat(document.getElementById("simA").value);
+
+let anim=setInterval(()=>{
+
+ctx.clearRect(0,0,900,200);
+
+ctx.fillStyle="#0057b8";
+
+let s=(v0*tempo)+(a*Math.pow(tempo,2))/2;
+
+ctx.beginPath();
+ctx.arc(x+s,100,15,0,Math.PI*2);
+ctx.fill();
+
+tempo+=0.1;
+
+if(x+s>850){
+clearInterval(anim);
+}
+
+},30);
+
+}
+
+function desenharGrafico(){
+
+let c=document.getElementById("grafico");
+let g=c.getContext("2d");
+
+g.clearRect(0,0,c.width,c.height);
+
+g.strokeStyle="black";
+
+g.beginPath();
+g.moveTo(50,300);
+g.lineTo(850,300);
+g.stroke();
+
+g.beginPath();
+g.moveTo(50,20);
+g.lineTo(50,300);
+g.stroke();
+
+g.strokeStyle="red";
+g.beginPath();
+
+let v0=0;
+let a=2;
+
+for(let t=0;t<=20;t+=0.1){
+
+let s=v0*t+(a*t*t)/2;
+
+let x=50+t*35;
+let y=300-s*2;
+
+if(t===0)
+g.moveTo(x,y);
+else
+g.lineTo(x,y);
+
+}
+
+g.stroke();
+
+}
+
+</script>
+
+</body>
+</html>
