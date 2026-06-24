@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>MUV • Visão • Mobilidade</title>
-/* ===== OLHO INTERATIVO ===== */
 
+<style>
+/* ===== OLHO INTERATIVO ===== */
 .olho-container{
 display:flex;
 justify-content:center;
@@ -43,13 +43,7 @@ width:140px;
 height:140px;
 border-radius:50%;
 cursor:pointer;
-
-background:
-radial-gradient(circle,
-#87e0ff 0%,
-#32b5ff 25%,
-#0066cc 65%,
-#00264d 100%);
+background: radial-gradient(circle, #87e0ff 0%, #32b5ff 25%, #0066cc 65%, #00264d 100%);
 }
 
 .pupila{
@@ -90,8 +84,8 @@ cursor:pointer;
 .nervo:hover{
 filter:brightness(1.15);
 }
-<style>
 
+/* ===== GERAL E LAYOUT ===== */
 *{
 margin:0;
 padding:0;
@@ -106,7 +100,7 @@ color:#333;
 
 header{
 background:linear-gradient(135deg,#0047ab,#00a8ff);
-color:red;
+color:white; /* Corrigido de red para white para melhor leitura */
 padding:40px;
 text-align:center;
 }
@@ -197,7 +191,7 @@ border-radius:15px;
 position:absolute;
 font-size:55px;
 cursor:pointer;
-transition:.3s;
+transition:.1s linear; /* Suaviza a animação de movimento */
 }
 
 .personagem:hover{
@@ -225,7 +219,6 @@ color:white;
 text-align:center;
 padding:20px;
 }
-
 </style>
 </head>
 <body>
@@ -238,167 +231,74 @@ padding:20px;
 <section>
 
 <div class="card">
-
 <h2>O que é MUV?</h2>
-
-<p>
-O Movimento Uniformemente Variado é caracterizado por uma aceleração constante.
-A velocidade varia igualmente ao longo do tempo.
-</p>
-
+<p>O Movimento Uniformemente Variado é caracterizado por uma aceleração constante. A velocidade varia igualmente ao longo do tempo.</p>
 <br>
-
 <p><b>v = v₀ + a·t</b></p>
 <p><b>s = s₀ + v₀·t + (a·t²)/2</b></p>
 <p><b>v² = v₀² + 2aΔs</b></p>
-
 </div>
 
 <div class="card">
-
 <h2>Mapa Conceitual Interativo</h2>
-
 <div class="no" onclick="mostrarInfo('vel')">Velocidade</div>
 <div class="no" onclick="mostrarInfo('ace')">Aceleração</div>
 <div class="no" onclick="mostrarInfo('pos')">Posição</div>
 <div class="no" onclick="mostrarInfo('graf')">Gráficos</div>
-
-<div id="painelMapa" class="info">
-Clique nos conceitos acima.
-</div>
-
+<div id="painelMapa" class="info">Clique nos conceitos acima.</div>
 </div>
 
 <div class="card">
-
 <h2>Calculadora de MUV</h2>
-
 <input id="v0" placeholder="v₀">
-
 <input id="a" placeholder="a">
-
 <input id="t" placeholder="tempo">
-
-<button onclick="calcular()">
-Calcular
-</button>
-
+<button onclick="calcular()">Calcular</button>
 <div id="resultado" class="resultado"></div>
-
 </div>
 
 <div class="card">
-
 <h2>Simulação do Movimento</h2>
-
 <input id="simV0" value="0">
 <input id="simA" value="2">
-
-<button onclick="iniciar()">
-Iniciar
-</button>
-
+<button onclick="iniciar()">Iniciar</button>
 <canvas id="canvas" width="1000" height="220"></canvas>
-
 </div>
 
 <div class="card">
-
 <h2>Gráfico da Posição</h2>
-
-<button onclick="desenharGrafico()">
-Gerar Gráfico
-</button>
-
+<button onclick="desenharGrafico()">Gerar Gráfico</button>
 <canvas id="grafico" width="1000" height="350"></canvas>
-
 </div>
-<div class="card">
 
+<div class="card">
 <h2>👁️ Laboratório Interativo da Visão</h2>
-
-<p>
-Explore as estruturas do olho humano clicando em cada região.
-</p>
-
+<p>Explore as estruturas do olho humano clicando em cada região.</p>
 <div class="olho-container">
-
-<div class="olho">
-
-<div class="retina"
-onclick="explicarOlho('retina')">
+    <div class="olho">
+        <div class="retina" onclick="explicarOlho('retina')"></div>
+        <div class="iris" onclick="explicarOlho('iris')">
+            <div class="pupila" onclick="event.stopPropagation();explicarOlho('pupila')"></div>
+        </div>
+        <div class="reflexo"></div>
+        <div class="nervo" onclick="explicarOlho('nervo')"></div>
+    </div>
 </div>
-
-<div class="iris"
-onclick="explicarOlho('iris')">
-
-<div class="pupila"
-onclick="event.stopPropagation();explicarOlho('pupila')">
-</div>
-
-</div>
-
-<div class="reflexo"></div>
-
-<div class="nervo"
-onclick="explicarOlho('nervo')">
-</div>
-
-</div>
-
-</div>
-
 <div id="painelOlho" class="info">
-
-<h3>👁️ Sistema Visual</h3>
-
-<p>
-Clique na íris, pupila, retina ou nervo óptico para aprender mais.
-</p>
-
+    <h3>👁️ Sistema Visual</h3>
+    <p>Clique na íris, pupila, retina ou nervo óptico para aprender mais.</p>
 </div>
-
 </div>
 
 <div class="card">
-
 <h2>♿🐆🚶 Mobilidade Interativa</h2>
-
-<p>
-Clique em um personagem para observar seu deslocamento.
-</p>
-
+<p>Clique em um personagem para observar seu deslocamento.</p>
 <div id="cenario">
-
-<div
-id="cadeirante"
-class="personagem"
-onclick="mover('cadeirante')">
-🧑‍🦽
+    <div id="cadeirante" class="personagem" onclick="mover('cadeirante')">🧑‍🦽</div>
+    <div id="onca" class="personagem" onclick="mover('onca')">🐆</div>
+    <div id="humano" class="personagem" onclick="mover('humano')">🚶</div>
 </div>
-
-<div
-id="onca"
-class="personagem"
-onclick="mover('onca')">
-🐆
-</div>
-
-<div
-id="humano"
-class="personagem"
-onclick="mover('humano')">
-🚶
-</div>
-
-</div>
-
-<div
-id="descricaoMobilidade"
-class="resultado">
-Clique em um personagem.
-</div>
-
+<div id="descricaoMobilidade" class="resultado">Clique em um personagem.</div>
 </div>
 
 </section>
@@ -408,253 +308,126 @@ Projeto Interativo • Física • Visão • Mobilidade
 </footer>
 
 <script>
-
 function mostrarInfo(tipo){
-
-const painel =
-document.getElementById("painelMapa");
-
-if(tipo==="vel"){
-painel.innerHTML=
-"Velocidade é a rapidez com que a posição muda.";
-}
-
-if(tipo==="ace"){
-painel.innerHTML=
-"A aceleração permanece constante no MUV.";
-}
-
-if(tipo==="pos"){
-painel.innerHTML=
-"A posição segue uma função quadrática.";
-}
-
-if(tipo==="graf"){
-painel.innerHTML=
-"v×t = reta • s×t = parábola • a×t = constante";
-}
-
+    const painel = document.getElementById("painelMapa");
+    if(tipo==="vel") painel.innerHTML = "Velocidade é a rapidez com que a posição muda.";
+    if(tipo==="ace") painel.innerHTML = "A aceleração permanece constante no MUV.";
+    if(tipo==="pos") painel.innerHTML = "A posição segue uma função quadrática.";
+    if(tipo==="graf") painel.innerHTML = "v×t = reta • s×t = parábola • a×t = constante";
 }
 
 function calcular(){
-
-let v0 =
-parseFloat(document.getElementById("v0").value);
-
-let a =
-parseFloat(document.getElementById("a").value);
-
-let t =
-parseFloat(document.getElementById("t").value);
-
-let v = v0 + a*t;
-
-document.getElementById("resultado")
-.innerHTML =
-"Velocidade Final = " +
-v.toFixed(2) + " m/s";
-
+    let v0 = parseFloat(document.getElementById("v0").value) || 0;
+    let a = parseFloat(document.getElementById("a").value) || 0;
+    let t = parseFloat(document.getElementById("t").value) || 0;
+    let v = v0 + a*t;
+    document.getElementById("resultado").innerHTML = "Velocidade Final = " + v.toFixed(2) + " m/s";
 }
 
-const canvas =
-document.getElementById("canvas");
-
-const ctx =
-canvas.getContext("2d");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
 function iniciar(){
-
-let tempo=0;
-
-let v0 =
-parseFloat(document.getElementById("simV0").value);
-
-let a =
-parseFloat(document.getElementById("simA").value);
-
-let anim = setInterval(()=>{
-
-ctx.clearRect(0,0,1000,220);
-
-let s =
-(v0*tempo)+
-(a*Math.pow(tempo,2))/2;
-
-ctx.fillStyle="#0057b8";
-
-ctx.beginPath();
-
-ctx.arc(
-50+s*3,
-110,
-15,
-0,
-Math.PI*2
-);
-
-ctx.fill();
-
-tempo+=0.1;
-
-if(50+s*3 > 950){
-clearInterval(anim);
-}
-
-},30);
-
+    let tempo = 0;
+    let v0 = parseFloat(document.getElementById("simV0").value) || 0;
+    let a = parseFloat(document.getElementById("simA").value) || 0;
+    
+    let anim = setInterval(()=>{
+        ctx.clearRect(0,0,1000,220);
+        let s = (v0*tempo) + (a*Math.pow(tempo,2))/2;
+        
+        ctx.fillStyle="#0057b8";
+        ctx.beginPath();
+        ctx.arc(50+s*3, 110, 15, 0, Math.PI*2);
+        ctx.fill();
+        
+        tempo += 0.1;
+        if(50+s*3 > 950){
+            clearInterval(anim);
+        }
+    },30);
 }
 
 function desenharGrafico(){
-
-const c =
-document.getElementById("grafico");
-
-const g =
-c.getContext("2d");
-
-g.clearRect(0,0,c.width,c.height);
-
-g.strokeStyle="black";
-
-g.beginPath();
-g.moveTo(50,300);
-g.lineTo(950,300);
-g.stroke();
-
-g.beginPath();
-g.moveTo(50,20);
-g.lineTo(50,300);
-g.stroke();
-
-g.strokeStyle="red";
-g.beginPath();
-
-for(let t=0;t<=20;t+=0.1){
-
-let s=(2*t*t)/2;
-
-let x=50+t*40;
-let y=300-s*2;
-
-if(t===0)
-g.moveTo(x,y);
-else
-g.lineTo(x,y);
-
+    const c = document.getElementById("grafico");
+    const g = c.getContext("2d");
+    g.clearRect(0,0,c.width,c.height);
+    
+    g.strokeStyle="black";
+    g.beginPath();
+    g.moveTo(50,300);
+    g.lineTo(950,300);
+    g.stroke();
+    
+    g.beginPath();
+    g.moveTo(50,20);
+    g.lineTo(50,300);
+    g.stroke();
+    
+    g.strokeStyle="red";
+    g.beginPath();
+    for(let t=0; t<=20; t+=0.1){
+        let s = (2*t*t)/2;
+        let x = 50 + t*40;
+        let y = 300 - s*2;
+        if(t===0) g.moveTo(x,y);
+        else g.lineTo(x,y);
+    }
+    g.stroke();
 }
 
-g.stroke();
-
-}
 function explicarOlho(parte){
-
-const painel =
-document.getElementById("painelOlho");
-
-if(parte==="iris"){
-
-painel.innerHTML = `
-<h3>🔵 Íris</h3>
-<p>
-A íris controla a quantidade de luz que entra no olho,
-ajustando o tamanho da pupila.
-</p>
-`;
-
+    const painel = document.getElementById("painelOlho");
+    if(parte==="iris"){
+        painel.innerHTML = "<h3>🔵 Íris</h3><p>A íris controla a quantidade de luz que entra no olho, ajustando o tamanho da pupila.</p>";
+    }
+    if(parte==="pupila"){
+        painel.innerHTML = "<h3>⚫ Pupila</h3><p>É a abertura central do olho. Em ambientes escuros, ela aumenta para captar mais luz.</p>";
+    }
+    if(parte==="retina"){
+        painel.innerHTML = "<h3>🧠 Retina</h3><p>A retina possui cones e bastonetes que transformam luz em impulsos nervosos enviados ao cérebro.</p>";
+    }
+    if(parte==="nervo"){
+        painel.innerHTML = "<h3>⚡ Nervo Óptico</h3><p>Transporta os sinais visuais da retina até o cérebro, onde a imagem é interpretada.</p>";
+    }
 }
 
-if(parte==="pupila"){
-
-painel.innerHTML = `
-<h3>⚫ Pupila</h3>
-<p>
-É a abertura central do olho. Em ambientes escuros,
-ela aumenta para captar mais luz.
-</p>
-`;
-
-}
-
-if(parte==="retina"){
-
-painel.innerHTML = `
-<h3>🧠 Retina</h3>
-<p>
-A retina possui cones e bastonetes que transformam luz
-em impulsos nervosos enviados ao cérebro.
-</p>
-`;
-
-}
-
-if(parte==="nervo"){
-
-painel.innerHTML = `
-<h3>⚡ Nervo Óptico</h3>
-<p>
-Transporta os sinais visuais da retina até o cérebro,
-onde a imagem é interpretada.
-</p>
-`;
-
-}
-
-}
-}
-
+// Recriação da lógica da função mover que estava cortada
 function mover(id){
+    let obj = document.getElementById(id);
+    let painel = document.getElementById("descricaoMobilidade");
+    let pos = 20;
+    let velocidade = 5;
+    let nome = "O humano";
 
-let obj =
-document.getElementById(id);
+    if(id === "onca") {
+        velocidade = 15;
+        nome = "A onça";
+    }
+    if(id === "cadeirante") {
+        velocidade = 8;
+        nome = "O cadeirante";
+    }
 
-let pos = 20;
+    painel.innerHTML = nome + " está se movendo!";
 
-let velocidade = 5;
+    let animacao = setInterval(() => {
+        pos += velocidade;
+        obj.style.left = pos + "px";
 
-if(id==="onca")
-velocidade=12;
-
-if(id==="humano")
-velocidade=8;
-
-if(id==="cadeirante")
-velocidade=6;
-
-let anim =
-setInterval(()=>{
-
-pos += velocidade;
-
-obj.style.left =
-pos+"px";
-
-if(pos > 900){
-clearInterval(anim);
+        // Se o personagem chegar perto do limite do cenário, ele para
+        if (pos > 1100) {
+            clearInterval(animacao);
+            painel.innerHTML = nome + " chegou ao destino final.";
+            
+            // Reseta a posição após 2 segundos
+            setTimeout(() => {
+                obj.style.left = "20px";
+                painel.innerHTML = "Clique em um personagem.";
+            }, 2000);
+        }
+    }, 30);
 }
-
-},30);
-
-let texto =
-document.getElementById("descricaoMobilidade");
-
-if(id==="cadeirante"){
-texto.innerHTML =
-"🧑‍🦽 Mobilidade assistida por cadeira de rodas.";
-}
-
-if(id==="onca"){
-texto.innerHTML =
-"🐆 Deslocamento rápido e ágil.";
-}
-
-if(id==="humano"){
-texto.innerHTML =
-"🚶 Caminhada humana em velocidade moderada.";
-}
-
-}
-
 </script>
-
 </body>
 </html>
