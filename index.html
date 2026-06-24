@@ -6,6 +6,141 @@
 <title>MUV • Visão • Mobilidade</title>
 
 <style>
+/* ===== GERAL E LAYOUT ===== */
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,sans-serif;
+}
+
+body{
+background:#f4f7fb;
+color:#333;
+}
+
+header{
+background:linear-gradient(135deg,#0047ab,#00a8ff);
+color:white;
+padding:40px;
+text-align:center;
+}
+
+section{
+max-width:1200px;
+margin:auto;
+padding:30px;
+}
+
+.card{
+background:white;
+padding:25px;
+margin-bottom:30px;
+border-radius:15px;
+box-shadow:0 4px 12px rgba(0,0,0,.1);
+}
+
+h2{
+color:#0057b8;
+margin-bottom:15px;
+}
+
+/* ===== MAPA CONCEITUAL ===== */
+.no{
+display:inline-block;
+background:#0057b8;
+color:white;
+padding:12px 20px;
+border-radius:10px;
+margin:5px;
+cursor:pointer;
+transition:.3s;
+}
+
+.no:hover{
+transform:scale(1.05);
+background:#007bff;
+}
+
+.info{
+margin-top:15px;
+padding:15px;
+background:#eef6ff;
+border-radius:10px;
+}
+
+/* ===== FORMULÁRIOS ===== */
+input{
+padding:10px;
+margin:5px;
+width:120px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+button{
+padding:10px 20px;
+background:#0057b8;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+transition: 0.2s;
+}
+
+button:hover{
+background:#0085ff;
+}
+
+.resultado{
+margin-top:15px;
+font-weight:bold;
+}
+
+canvas{
+background:white;
+border:1px solid #ddd;
+border-radius:10px;
+margin-top:15px;
+max-width:100%;
+display: block;
+}
+
+/* ===== MOBILIDADE INTERATIVA ===== */
+#cenario{
+position:relative;
+height:250px;
+background:linear-gradient(#87ceeb,#d4f7c5);
+overflow:hidden;
+border-radius:15px;
+}
+
+.personagem{
+position:absolute;
+font-size:55px;
+cursor:pointer;
+user-select: none;
+}
+
+.personagem:hover{
+transform:scale(1.15);
+}
+
+#cadeirante{
+top:20px;
+left:20px;
+}
+
+#onca{
+top:95px;
+left:20px;
+}
+
+#humano{
+top:170px;
+left:20px;
+}
+
 /* ===== OLHO INTERATIVO ===== */
 .olho-container{
 display:flex;
@@ -32,6 +167,7 @@ width:40px;
 height:100%;
 background:#ffbdbd;
 cursor:pointer;
+z-index: 2;
 }
 
 .iris{
@@ -44,6 +180,7 @@ height:140px;
 border-radius:50%;
 cursor:pointer;
 background: radial-gradient(circle, #87e0ff 0%, #32b5ff 25%, #0066cc 65%, #00264d 100%);
+z-index: 3;
 }
 
 .pupila{
@@ -55,6 +192,7 @@ width:55px;
 height:55px;
 background:black;
 border-radius:50%;
+z-index: 4;
 }
 
 .reflexo{
@@ -66,6 +204,8 @@ height:28px;
 background:white;
 border-radius:50%;
 opacity:.85;
+z-index: 5;
+pointer-events: none;
 }
 
 .nervo{
@@ -77,6 +217,7 @@ height:40px;
 background:#e8c17a;
 border-radius:25px;
 cursor:pointer;
+z-index: 1;
 }
 
 .iris:hover,
@@ -85,139 +226,12 @@ cursor:pointer;
 filter:brightness(1.15);
 }
 
-/* ===== GERAL E LAYOUT ===== */
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Segoe UI,sans-serif;
-}
-
-body{
-background:#f4f7fb;
-color:#333;
-}
-
-header{
-background:linear-gradient(135deg,#0047ab,#00a8ff);
-color:white; /* Corrigido de red para white para melhor leitura */
-padding:40px;
-text-align:center;
-}
-
-section{
-max-width:1200px;
-margin:auto;
-padding:30px;
-}
-
-.card{
-background:white;
-padding:25px;
-margin-bottom:30px;
-border-radius:15px;
-box-shadow:0 4px 12px rgba(0,0,0,.1);
-}
-
-h2{
-color:#0057b8;
-margin-bottom:15px;
-}
-
-.no{
-display:inline-block;
-background:#0057b8;
-color:white;
-padding:12px 20px;
-border-radius:10px;
-margin:5px;
-cursor:pointer;
-transition:.3s;
-}
-
-.no:hover{
-transform:scale(1.05);
-background:#007bff;
-}
-
-.info{
-margin-top:15px;
-padding:15px;
-background:#eef6ff;
-border-radius:10px;
-}
-
-input{
-padding:10px;
-margin:5px;
-width:120px;
-}
-
-button{
-padding:10px 20px;
-background:#0057b8;
-color:white;
-border:none;
-border-radius:8px;
-cursor:pointer;
-}
-
-button:hover{
-background:#0085ff;
-}
-
-.resultado{
-margin-top:15px;
-font-weight:bold;
-}
-
-canvas{
-background:white;
-border:1px solid #ddd;
-border-radius:10px;
-margin-top:15px;
-max-width:100%;
-}
-
-#cenario{
-position:relative;
-height:250px;
-background:linear-gradient(#87ceeb,#d4f7c5);
-overflow:hidden;
-border-radius:15px;
-}
-
-.personagem{
-position:absolute;
-font-size:55px;
-cursor:pointer;
-transition:.1s linear; /* Suaviza a animação de movimento */
-}
-
-.personagem:hover{
-transform:scale(1.15);
-}
-
-#cadeirante{
-top:30px;
-left:20px;
-}
-
-#onca{
-top:100px;
-left:20px;
-}
-
-#humano{
-top:170px;
-left:20px;
-}
-
 footer{
 background:#0057b8;
 color:white;
 text-align:center;
 padding:20px;
+margin-top: 30px;
 }
 </style>
 </head>
@@ -250,17 +264,17 @@ padding:20px;
 
 <div class="card">
 <h2>Calculadora de MUV</h2>
-<input id="v0" placeholder="v₀">
-<input id="a" placeholder="a">
-<input id="t" placeholder="tempo">
+<input id="v0" placeholder="v₀ (m/s)">
+<input id="a" placeholder="a (m/s²)">
+<input id="t" placeholder="tempo (s)">
 <button onclick="calcular()">Calcular</button>
 <div id="resultado" class="resultado"></div>
 </div>
 
 <div class="card">
 <h2>Simulação do Movimento</h2>
-<input id="simV0" value="0">
-<input id="simA" value="2">
+<label for="simV0">v₀:</label> <input id="simV0" value="0">
+<label for="simA">a:</label> <input id="simA" value="2">
 <button onclick="iniciar()">Iniciar</button>
 <canvas id="canvas" width="1000" height="220"></canvas>
 </div>
@@ -310,40 +324,60 @@ Projeto Interativo • Física • Visão • Mobilidade
 <script>
 function mostrarInfo(tipo){
     const painel = document.getElementById("painelMapa");
-    if(tipo==="vel") painel.innerHTML = "Velocidade é a rapidez com que a posição muda.";
-    if(tipo==="ace") painel.innerHTML = "A aceleração permanece constante no MUV.";
-    if(tipo==="pos") painel.innerHTML = "A posição segue uma função quadrática.";
-    if(tipo==="graf") painel.innerHTML = "v×t = reta • s×t = parábola • a×t = constante";
+    if(tipo==="vel") painel.innerHTML = "<strong>Velocidade:</strong> É a rapidez com que a posição muda ao longo do tempo.";
+    if(tipo==="ace") painel.innerHTML = "<strong>Aceleração:</strong> Permanece constante no MUV, alterando a velocidade de forma regular.";
+    if(tipo==="pos") painel.innerHTML = "<strong>Posição:</strong> Segue uma função quadrática (parábola no gráfico s×t).";
+    if(tipo==="graf") painel.innerHTML = "<strong>Gráficos:</strong> v×t é uma reta inclinada • s×t é uma parábola • a×t é uma reta constante.";
 }
 
 function calcular(){
-    let v0 = parseFloat(document.getElementById("v0").value) || 0;
-    let a = parseFloat(document.getElementById("a").value) || 0;
-    let t = parseFloat(document.getElementById("t").value) || 0;
-    let v = v0 + a*t;
-    document.getElementById("resultado").innerHTML = "Velocidade Final = " + v.toFixed(2) + " m/s";
+    let v0 = parseFloat(document.getElementById("v0").value);
+    let a = parseFloat(document.getElementById("a").value);
+    let t = parseFloat(document.getElementById("t").value);
+    
+    if(isNaN(v0) || isNaN(a) || isNaN(t)) {
+        document.getElementById("resultado").innerHTML = "<span style='color:red;'>Preencha todos os campos com números válidos!</span>";
+        return;
+    }
+    
+    let v = v0 + a * t;
+    document.getElementById("resultado").innerHTML = "Velocidade Final (v) = " + v.toFixed(2) + " m/s";
 }
 
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-
+let animSimulacao = null;
 function iniciar(){
+    if(animSimulacao) clearInterval(animSimulacao);
+    
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
     let tempo = 0;
     let v0 = parseFloat(document.getElementById("simV0").value) || 0;
     let a = parseFloat(document.getElementById("simA").value) || 0;
     
-    let anim = setInterval(()=>{
+    animSimulacao = setInterval(()=>{
         ctx.clearRect(0,0,1000,220);
-        let s = (v0*tempo) + (a*Math.pow(tempo,2))/2;
         
+        // Equação de espaço do MUV: s = v0*t + (a*t^2)/2
+        let s = (v0*tempo) + (a*Math.pow(tempo,2))/2;
+        let xPos = 50 + s * 3; 
+        
+        // Desenha a linha da pista
+        ctx.strokeStyle = "#ddd";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(50, 110);
+        ctx.lineTo(950, 110);
+        ctx.stroke();
+
+        // Desenha a esfera em movimento
         ctx.fillStyle="#0057b8";
         ctx.beginPath();
-        ctx.arc(50+s*3, 110, 15, 0, Math.PI*2);
+        ctx.arc(xPos, 110, 15, 0, Math.PI*2);
         ctx.fill();
         
         tempo += 0.1;
-        if(50+s*3 > 950){
-            clearInterval(anim);
+        if(xPos > 950 || xPos < 0){
+            clearInterval(animSimulacao);
         }
     },30);
 }
@@ -353,23 +387,30 @@ function desenharGrafico(){
     const g = c.getContext("2d");
     g.clearRect(0,0,c.width,c.height);
     
+    // Eixos do gráfico
     g.strokeStyle="black";
+    g.lineWidth = 2;
     g.beginPath();
-    g.moveTo(50,300);
+    g.moveTo(50,300); // Eixo X
     g.lineTo(950,300);
     g.stroke();
     
     g.beginPath();
-    g.moveTo(50,20);
+    g.moveTo(50,20); // Eixo Y
     g.lineTo(50,300);
     g.stroke();
     
+    // Curva da Parábola (MUV)
     g.strokeStyle="red";
+    g.lineWidth = 3;
     g.beginPath();
     for(let t=0; t<=20; t+=0.1){
-        let s = (2*t*t)/2;
-        let x = 50 + t*40;
-        let y = 300 - s*2;
+        let s = (1.5*t*t)/2; // s = a*t^2 / 2 (Aceleração base fixa para visualização rápida)
+        let x = 50 + t*42;
+        let y = 300 - s*1.3;
+        
+        if(y < 20) break; // Não deixa a linha sair pelo topo do canvas
+        
         if(t===0) g.moveTo(x,y);
         else g.lineTo(x,y);
     }
@@ -379,55 +420,16 @@ function desenharGrafico(){
 function explicarOlho(parte){
     const painel = document.getElementById("painelOlho");
     if(parte==="iris"){
-        painel.innerHTML = "<h3>🔵 Íris</h3><p>A íris controla a quantidade de luz que entra no olho, ajustando o tamanho da pupila.</p>";
+        painel.innerHTML = "<h3>🔵 Íris</h3><p>A parte colorida do olho. Ela controla a quantidade de luz que entra dilatando ou contraindo a pupila.</p>";
     }
     if(parte==="pupila"){
-        painel.innerHTML = "<h3>⚫ Pupila</h3><p>É a abertura central do olho. Em ambientes escuros, ela aumenta para captar mais luz.</p>";
+        painel.innerHTML = "<h3>⚫ Pupila</h3><p>O ponto central escuro. Ela funciona como a abertura de uma câmera, expandindo no escuro e encolhendo na luz forte.</p>";
     }
     if(parte==="retina"){
-        painel.innerHTML = "<h3>🧠 Retina</h3><p>A retina possui cones e bastonetes que transformam luz em impulsos nervosos enviados ao cérebro.</p>";
+        painel.innerHTML = "<h3>🧠 Retina</h3><p>A camada no fundo do olho que capta a luz e as imagens através de células fotorreceptoras.</p>";
     }
     if(parte==="nervo"){
-        painel.innerHTML = "<h3>⚡ Nervo Óptico</h3><p>Transporta os sinais visuais da retina até o cérebro, onde a imagem é interpretada.</p>";
+        painel.innerHTML = "<h3>⚡ Nervo Óptico</h3><p>O cabo condutor que leva todos os impulsos elétricos gerados na retina diretamente para o cérebro decodificar.</p>";
     }
 }
 
-// Recriação da lógica da função mover que estava cortada
-function mover(id){
-    let obj = document.getElementById(id);
-    let painel = document.getElementById("descricaoMobilidade");
-    let pos = 20;
-    let velocidade = 5;
-    let nome = "O humano";
-
-    if(id === "onca") {
-        velocidade = 15;
-        nome = "A onça";
-    }
-    if(id === "cadeirante") {
-        velocidade = 8;
-        nome = "O cadeirante";
-    }
-
-    painel.innerHTML = nome + " está se movendo!";
-
-    let animacao = setInterval(() => {
-        pos += velocidade;
-        obj.style.left = pos + "px";
-
-        // Se o personagem chegar perto do limite do cenário, ele para
-        if (pos > 1100) {
-            clearInterval(animacao);
-            painel.innerHTML = nome + " chegou ao destino final.";
-            
-            // Reseta a posição após 2 segundos
-            setTimeout(() => {
-                obj.style.left = "20px";
-                painel.innerHTML = "Clique em um personagem.";
-            }, 2000);
-        }
-    }, 30);
-}
-</script>
-</body>
-</html>
