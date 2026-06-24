@@ -3,6 +3,174 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MUV • Física • Visão • Mobilidade</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Segoe UI,sans-serif;background:#f4f7fb;color:#333}
+header{background:linear-gradient(135deg,#0047ab,#00a8ff);color:#fff;text-align:center;padding:40px}
+nav{position:sticky;top:0;background:#003b8e;padding:12px;z-index:99}
+nav a{color:white;text-decoration:none;margin:0 12px;font-weight:bold}
+section{max-width:1200px;margin:auto;padding:25px}
+.card{background:white;border-radius:16px;padding:24px;margin:24px 0;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+h2{color:#0057b8;margin-bottom:12px}
+.no{display:inline-block;background:#0057b8;color:white;padding:10px 16px;border-radius:10px;margin:5px;cursor:pointer}
+.info,.resultado{margin-top:12px;padding:12px;background:#eef6ff;border-radius:10px}
+input{padding:10px;margin:4px;border:1px solid #ccc;border-radius:8px}
+button{padding:10px 16px;background:#0057b8;color:white;border:none;border-radius:8px;cursor:pointer}
+canvas{border:1px solid #ddd;border-radius:10px;max-width:100%;background:white}
+#cenario{height:260px;position:relative;background:linear-gradient(#87ceeb,#d4f7c5);border-radius:15px;overflow:hidden}
+.personagem{position:absolute;left:20px;font-size:55px;cursor:pointer}
+#cadeirante{top:20px}#onca{top:100px}#humano{top:180px}
+.olho{position:relative;width:min(450px,95%);height:220px;background:white;border:8px solid #444;border-radius:50%;margin:auto}
+.iris{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,#8be0ff,#0066cc)}
+.pupila{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:50px;height:50px;border-radius:50%;background:black}
+.retina{position:absolute;right:0;width:40px;height:100%;background:#ffbdbd}
+.nervo{position:absolute;right:-30px;top:90px;width:60px;height:35px;background:#e8c17a;border-radius:20px}
+footer{background:#0057b8;color:white;text-align:center;padding:20px}
+</style>
+</head>
+<body>
+<header><h1>Projeto Interativo de Física</h1><p>MUV • Visão Humana • Mobilidade</p></header>
+
+<nav>
+<a href="#muv">MUV</a>
+<a href="#sim">Simulação</a>
+<a href="#graf">Gráfico</a>
+<a href="#olho">Visão</a>
+<a href="#mob">Mobilidade</a>
+</nav>
+
+<section>
+
+<div class="card" id="muv">
+<h2>Calculadora de MUV</h2>
+<input type="number" id="v0" placeholder="Velocidade inicial">
+<input type="number" id="a" placeholder="Aceleração">
+<input type="number" id="t" placeholder="Tempo">
+<button onclick="calcular()">Calcular</button>
+<div id="resultado" class="resultado"></div>
+</div>
+
+<div class="card">
+<h2>Mapa Conceitual Interativo</h2>
+<div class="no" onclick="mapa('vel')">Velocidade</div>
+<div class="no" onclick="mapa('ace')">Aceleração</div>
+<div class="no" onclick="mapa('pos')">Posição</div>
+<div class="no" onclick="mapa('graf')">Gráficos</div>
+<div id="painelMapa" class="info">Clique em um conceito.</div>
+</div>
+
+<div class="card" id="sim">
+<h2>Simulação do Movimento</h2>
+<input type="number" id="simV0" value="0">
+<input type="number" id="simA" value="2">
+<button onclick="iniciar()">Iniciar</button><br><br>
+<canvas id="simCanvas" width="1000" height="220"></canvas>
+</div>
+
+<div class="card" id="graf">
+<h2>Gráfico da Posição</h2>
+<button onclick="grafico()">Gerar Gráfico</button><br><br>
+<canvas id="grafCanvas" width="1000" height="350"></canvas>
+</div>
+
+<div class="card" id="olho">
+<h2>Laboratório da Visão</h2>
+<div class="olho">
+<div class="retina" onclick="olho('retina')"></div>
+<div class="iris" onclick="olho('iris')">
+<div class="pupila" onclick="event.stopPropagation();olho('pupila')"></div>
+</div>
+<div class="nervo" onclick="olho('nervo')"></div>
+</div>
+<div id="painelOlho" class="info">Clique em uma estrutura.</div>
+</div>
+
+<div class="card" id="mob">
+<h2>Mobilidade Interativa</h2>
+<div id="cenario">
+<div class="personagem" id="cadeirante" onclick="mover('cadeirante')">🧑‍🦽</div>
+<div class="personagem" id="onca" onclick="mover('onca')">🐆</div>
+<div class="personagem" id="humano" onclick="mover('humano')">🚶</div>
+</div>
+<div id="descricao" class="resultado">Clique em um personagem.</div>
+</div>
+
+</section>
+
+<footer>Projeto Educacional Interativo</footer>
+
+<script>
+function calcular(){
+let v0=parseFloat(document.getElementById('v0').value);
+let a=parseFloat(document.getElementById('a').value);
+let t=parseFloat(document.getElementById('t').value);
+if(isNaN(v0)||isNaN(a)||isNaN(t)){resultado.innerHTML='Preencha todos os campos';return;}
+resultado.innerHTML=`Velocidade Final = <b>${(v0+a*t).toFixed(2)} m/s</b>`;
+}
+function mapa(x){
+const p=document.getElementById('painelMapa');
+const d={vel:'Velocidade: mudança da posição no tempo.',ace:'Aceleração: mudança da velocidade.',pos:'Posição: localização do corpo.',graf:'s×t parábola, v×t reta, a×t constante.'};
+p.innerHTML=d[x];
+}
+let ani;
+function iniciar(){
+clearInterval(ani);
+let c=document.getElementById('simCanvas'),ctx=c.getContext('2d');
+let v0=+document.getElementById('simV0').value||0;
+let a=+document.getElementById('simA').value||0,t=0;
+ani=setInterval(()=>{
+ctx.clearRect(0,0,1000,220);
+ctx.beginPath();ctx.moveTo(50,110);ctx.lineTo(950,110);ctx.stroke();
+let s=v0*t+a*t*t/2;
+let x=Math.min(950,50+s*3);
+ctx.beginPath();ctx.arc(x,110,15,0,Math.PI*2);ctx.fill();
+t+=0.1;
+if(x>=950)clearInterval(ani);
+},30);
+}
+function grafico(){
+let c=document.getElementById('grafCanvas'),ctx=c.getContext('2d');
+ctx.clearRect(0,0,1000,350);
+ctx.beginPath();ctx.moveTo(50,20);ctx.lineTo(50,320);ctx.lineTo(980,320);ctx.stroke();
+let v0=+document.getElementById('simV0').value||0;
+let a=+document.getElementById('simA').value||0;
+ctx.beginPath();
+for(let t=0;t<=25;t+=.5){
+let s=v0*t+a*t*t/2;
+let x=50+t*35,y=320-s*.5;
+if(t===0)ctx.moveTo(x,y); else ctx.lineTo(x,y);
+}
+ctx.strokeStyle='red';ctx.stroke();
+}
+function olho(p){
+const txt={retina:'Retina: converte luz em sinais elétricos.',iris:'Íris: controla a entrada de luz.',pupila:'Pupila: abertura central do olho.',nervo:'Nervo óptico: leva informações ao cérebro.'};
+document.getElementById('painelOlho').innerHTML=txt[p];
+}
+function mover(id){
+const e=document.getElementById(id),d=document.getElementById('descricao');
+let v=2,a=0.5,n='Cadeirante';
+if(id==='onca'){v=5;a=4;n='Onça';}
+if(id==='humano'){v=1;a=0.1;n='Pedestre';}
+let t=0;
+const h=setInterval(()=>{
+t+=0.1;
+let s=v*t+a*t*t/2,p=20+s*10;
+e.style.left=p+'px';
+d.innerHTML=`${n} | tempo ${t.toFixed(1)}s | deslocamento ${s.toFixed(1)}m`;
+if(p>900){clearInterval(h);e.style.left='20px';}
+},50);
+}
+</script>
+</body>
+</html>
+
+Em qua., 24 de jun. de 2026, 08:56, Mayza Silva <mayza.silva8800@gmail.com> escreveu:
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MUV • Visão • Mobilidade</title>
 
 <style>
@@ -117,8 +285,7 @@ border-radius:15px;
 
 .personagem{
 position:absolute;
-font-size:55
-px;
+font-size:55px;
 cursor:pointer;
 user-select: none;
 transition: left 0.1s linear;
@@ -302,7 +469,63 @@ margin-top: 30px;
 </div>
 <div id="painelOlho" class="info">
     <
-);
+h3>👁️ Sistema Visual</h3>
+    <p>Clique na íris, pupila, retina ou nervo óptico para aprender mais.</p>
+</div>
+</div>
+
+<div class="card">
+<h2>♿🐆🚶 Mobilidade Interativa</h2>
+<p>Clique em um personagem para observar seu deslocamento.</p>
+<div id="cenario">
+    <div id="cadeirante" class="personagem" onclick="mover('cadeirante')">🧑‍🦽</div>
+    <div id="onca" class="personagem" onclick="mover('onca')">🐆</div>
+    <div id="humano" class="personagem" onclick="mover('humano')">🚶</div>
+</div>
+<div id="descricaoMobilidade" class="resultado">Clique em um personagem.</div>
+</div>
+
+</section>
+
+<footer>
+Projeto Interativo • Física • Visão • Mobilidade
+</footer>
+
+<script>
+function mostrarInfo(tipo){
+    const painel = document.getElementById("painelMapa");
+    if(tipo==="vel") painel.innerHTML = "<strong>Velocidade:</strong> É a rapidez com que a posição muda ao longo do tempo.";
+    if(tipo==="ace") painel.innerHTML = "<strong>Aceleração:</strong> Permanece constante no MUV, alterando a velocidade de forma regular.";
+    if(tipo==="pos") painel.innerHTML = "<strong>Posição:</strong> Segue uma função quadrática (parábola no gráfico s×t).";
+    if(tipo==="graf") painel.innerHTML = "<strong>Gráficos:</strong> v×t é uma reta inclinada • s×t é uma parábola • a×t é uma reta constante.";
+}
+
+function calcular(){
+    let v0 = parseFloat(document.getElementById("v0").value);
+    let a = parseFloat(document.getElementById("a").value);
+    let t = parseFloat(document.getElementById("t").value);
+   
+    if(isNaN(v0) || isNaN(a) || isNaN(t)) {
+        document.getElementById("resultado").innerHTML = "<span style='color:red;'>Preencha todos os campos com números válidos!</span>";
+        return;
+    }
+   
+    let v = v0 + a * t;
+    document.getElementById("resultado").innerHTML = "Velocidade Final (v) = " + v.toFixed(2) + " m/s";
+}
+
+let animSimulacao = null;
+function iniciar(){
+    if(animSimulacao) clearInterval(animSimulacao);
+   
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    let tempo = 0;
+    let v0 = parseFloat(document.getElementById("simV0").value) || 0;
+    let a = parseFloat(document.getElementById("simA").value) || 0;
+   
+    animSimulacao = setInterval(()=>{
+        ctx.clearRect(0,0,1000,220);
        
         let s = (v0*tempo) + (a*Math.pow(tempo,2))/2;
         let xPos = 50 + s * 3;
@@ -397,7 +620,6 @@ painel.innerHTML = <strong>${nome} em MUV:</strong> v₀ = ${v0}m/s | a = ${a}m/
 }
 }, 50);
 }
-
 
 Em qua., 24 de jun. de 2026, 08:52, MAYZA VITORIA FERREIRA SILVA <mayza.ferreira.silva@escola.pr.gov.br> escreveu:
 <!DOCTYPE html>
@@ -834,6 +1056,4 @@ function explicarOlho(parte){
         painel.innerHTML = "<h3>⚡ Nervo Óptico</h3><p>O cabo condutor que leva todos os impulsos elétricos gerados na retina diretamente para o cérebro decodificar.</p>";
     }
 }
-
-
 
