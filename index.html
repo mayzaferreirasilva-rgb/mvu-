@@ -5,7 +5,91 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>MUV • Visão • Mobilidade</title>
+/* ===== OLHO INTERATIVO ===== */
 
+.olho-container{
+display:flex;
+justify-content:center;
+padding:30px;
+}
+
+.olho{
+position:relative;
+width:450px;
+height:240px;
+background:white;
+border:8px solid #444;
+border-radius:60% 60% 60% 60% / 100% 100% 100% 100%;
+overflow:hidden;
+box-shadow:0 0 25px rgba(0,0,0,.25);
+}
+
+.retina{
+position:absolute;
+right:0;
+top:0;
+width:40px;
+height:100%;
+background:#ffbdbd;
+cursor:pointer;
+}
+
+.iris{
+position:absolute;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+width:140px;
+height:140px;
+border-radius:50%;
+cursor:pointer;
+
+background:
+radial-gradient(circle,
+#87e0ff 0%,
+#32b5ff 25%,
+#0066cc 65%,
+#00264d 100%);
+}
+
+.pupila{
+position:absolute;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+width:55px;
+height:55px;
+background:black;
+border-radius:50%;
+}
+
+.reflexo{
+position:absolute;
+left:180px;
+top:55px;
+width:28px;
+height:28px;
+background:white;
+border-radius:50%;
+opacity:.85;
+}
+
+.nervo{
+position:absolute;
+right:-35px;
+top:95px;
+width:70px;
+height:40px;
+background:#e8c17a;
+border-radius:25px;
+cursor:pointer;
+}
+
+.iris:hover,
+.retina:hover,
+.nervo:hover{
+filter:brightness(1.15);
+}
 <style>
 
 *{
@@ -229,30 +313,49 @@ Gerar Gráfico
 <canvas id="grafico" width="1000" height="350"></canvas>
 
 </div>
-
 <div class="card">
 
-<h2>👁️ Visão e Percepção</h2>
+<h2>👁️ Laboratório Interativo da Visão</h2>
 
 <p>
-A visão nos permite interpretar velocidade, direção,
-profundidade e movimento dos objetos.
+Explore as estruturas do olho humano clicando em cada região.
 </p>
 
-<div class="no" onclick="visao('prof')">
-Profundidade
+<div class="olho-container">
+
+<div class="olho">
+
+<div class="retina"
+onclick="explicarOlho('retina')">
 </div>
 
-<div class="no" onclick="visao('mov')">
-Movimento
+<div class="iris"
+onclick="explicarOlho('iris')">
+
+<div class="pupila"
+onclick="event.stopPropagation();explicarOlho('pupila')">
 </div>
 
-<div class="no" onclick="visao('velocidade')">
-Velocidade
 </div>
 
-<div id="painelVisao" class="info">
-Clique em um conceito.
+<div class="reflexo"></div>
+
+<div class="nervo"
+onclick="explicarOlho('nervo')">
+</div>
+
+</div>
+
+</div>
+
+<div id="painelOlho" class="info">
+
+<h3>👁️ Sistema Visual</h3>
+
+<p>
+Clique na íris, pupila, retina ou nervo óptico para aprender mais.
+</p>
+
 </div>
 
 </div>
@@ -443,27 +546,60 @@ g.lineTo(x,y);
 g.stroke();
 
 }
-
-function visao(tipo){
+function explicarOlho(parte){
 
 const painel =
-document.getElementById("painelVisao");
+document.getElementById("painelOlho");
 
-if(tipo==="prof"){
-painel.innerHTML=
-"👁️ A profundidade ajuda a perceber distância e espaço.";
+if(parte==="iris"){
+
+painel.innerHTML = `
+<h3>🔵 Íris</h3>
+<p>
+A íris controla a quantidade de luz que entra no olho,
+ajustando o tamanho da pupila.
+</p>
+`;
+
 }
 
-if(tipo==="mov"){
-painel.innerHTML=
-"🎯 O cérebro detecta alterações de posição para identificar movimento.";
+if(parte==="pupila"){
+
+painel.innerHTML = `
+<h3>⚫ Pupila</h3>
+<p>
+É a abertura central do olho. Em ambientes escuros,
+ela aumenta para captar mais luz.
+</p>
+`;
+
 }
 
-if(tipo==="velocidade"){
-painel.innerHTML=
-"⚡ A velocidade é percebida pela variação da posição ao longo do tempo.";
+if(parte==="retina"){
+
+painel.innerHTML = `
+<h3>🧠 Retina</h3>
+<p>
+A retina possui cones e bastonetes que transformam luz
+em impulsos nervosos enviados ao cérebro.
+</p>
+`;
+
 }
 
+if(parte==="nervo"){
+
+painel.innerHTML = `
+<h3>⚡ Nervo Óptico</h3>
+<p>
+Transporta os sinais visuais da retina até o cérebro,
+onde a imagem é interpretada.
+</p>
+`;
+
+}
+
+}
 }
 
 function mover(id){
