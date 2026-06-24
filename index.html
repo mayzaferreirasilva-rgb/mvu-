@@ -1,75 +1,524 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MUV • Visão • Mobilidade</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,sans-serif;
+}
+
+body{
+background:#f4f7fb;
+color:#333;
+}
+
+header{
+background:linear-gradient(135deg,#0047ab,#00a8ff);
+color:white;
+padding:40px;
+text-align:center;
+}
+
+section{
+max-width:1200px;
+margin:auto;
+padding:30px;
+}
+
+.card{
+background:white;
+padding:25px;
+margin-bottom:30px;
+border-radius:15px;
+box-shadow:0 4px 12px rgba(0,0,0,.1);
+}
+
+h2{
+color:#0057b8;
+margin-bottom:15px;
+}
+
+.no{
+display:inline-block;
+background:#0057b8;
+color:white;
+padding:12px 20px;
+border-radius:10px;
+margin:5px;
+cursor:pointer;
+transition:.3s;
+}
+
+.no:hover{
+transform:scale(1.05);
+background:#007bff;
+}
+
+.info{
+margin-top:15px;
+padding:15px;
+background:#eef6ff;
+border-radius:10px;
+}
+
+input{
+padding:10px;
+margin:5px;
+width:120px;
+}
+
+button{
+padding:10px 20px;
+background:#0057b8;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+button:hover{
+background:#0085ff;
+}
+
+.resultado{
+margin-top:15px;
+font-weight:bold;
+}
+
+canvas{
+background:white;
+border:1px solid #ddd;
+border-radius:10px;
+margin-top:15px;
+max-width:100%;
+}
+
+#cenario{
+position:relative;
+height:250px;
+background:linear-gradient(#87ceeb,#d4f7c5);
+overflow:hidden;
+border-radius:15px;
+}
+
+.personagem{
+position:absolute;
+font-size:55px;
+cursor:pointer;
+transition:.3s;
+}
+
+.personagem:hover{
+transform:scale(1.15);
+}
+
+#cadeirante{
+top:30px;
+left:20px;
+}
+
+#onca{
+top:100px;
+left:20px;
+}
+
+#humano{
+top:170px;
+left:20px;
+}
+
+footer{
+background:#0057b8;
+color:white;
+text-align:center;
+padding:20px;
+}
+
+</style>
+</head>
+<body>
+
+<header>
+<h1>Movimento Uniformemente Variado</h1>
+<p>Física • Visão • Mobilidade Interativa</p>
+</header>
+
+<section>
+
+<div class="card">
+
+<h2>O que é MUV?</h2>
+
+<p>
+O Movimento Uniformemente Variado é caracterizado por uma aceleração constante.
+A velocidade varia igualmente ao longo do tempo.
+</p>
+
+<br>
+
+<p><b>v = v₀ + a·t</b></p>
+<p><b>s = s₀ + v₀·t + (a·t²)/2</b></p>
+<p><b>v² = v₀² + 2aΔs</b></p>
+
+</div>
+
+<div class="card">
+
+<h2>Mapa Conceitual Interativo</h2>
+
+<div class="no" onclick="mostrarInfo('vel')">Velocidade</div>
+<div class="no" onclick="mostrarInfo('ace')">Aceleração</div>
+<div class="no" onclick="mostrarInfo('pos')">Posição</div>
+<div class="no" onclick="mostrarInfo('graf')">Gráficos</div>
+
+<div id="painelMapa" class="info">
+Clique nos conceitos acima.
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Calculadora de MUV</h2>
+
+<input id="v0" placeholder="v₀">
+
+<input id="a" placeholder="a">
+
+<input id="t" placeholder="tempo">
+
+<button onclick="calcular()">
+Calcular
+</button>
+
+<div id="resultado" class="resultado"></div>
+
+</div>
+
+<div class="card">
+
+<h2>Simulação do Movimento</h2>
+
+<input id="simV0" value="0">
+<input id="simA" value="2">
+
+<button onclick="iniciar()">
+Iniciar
+</button>
+
+<canvas id="canvas" width="1000" height="220"></canvas>
+
+</div>
+
+<div class="card">
+
+<h2>Gráfico da Posição</h2>
+
+<button onclick="desenharGrafico()">
+Gerar Gráfico
+</button>
+
+<canvas id="grafico" width="1000" height="350"></canvas>
+
+</div>
+
+<div class="card">
+
+<h2>👁️ Visão e Percepção</h2>
+
+<p>
+A visão nos permite interpretar velocidade, direção,
+profundidade e movimento dos objetos.
+</p>
+
+<div class="no" onclick="visao('prof')">
+Profundidade
+</div>
+
+<div class="no" onclick="visao('mov')">
+Movimento
+</div>
+
+<div class="no" onclick="visao('velocidade')">
+Velocidade
+</div>
+
+<div id="painelVisao" class="info">
+Clique em um conceito.
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>♿🐆🚶 Mobilidade Interativa</h2>
+
+<p>
+Clique em um personagem para observar seu deslocamento.
+</p>
+
+<div id="cenario">
+
+<div
+id="cadeirante"
+class="personagem"
+onclick="mover('cadeirante')">
+🧑‍🦽
+</div>
+
+<div
+id="onca"
+class="personagem"
+onclick="mover('onca')">
+🐆
+</div>
+
+<div
+id="humano"
+class="personagem"
+onclick="mover('humano')">
+🚶
+</div>
+
+</div>
+
+<div
+id="descricaoMobilidade"
+class="resultado">
+Clique em um personagem.
+</div>
+
+</div>
+
+</section>
+
+<footer>
+Projeto Interativo • Física • Visão • Mobilidade
+</footer>
+
+<script>
+
+function mostrarInfo(tipo){
+
+const painel =
+document.getElementById("painelMapa");
+
+if(tipo==="vel"){
+painel.innerHTML=
+"Velocidade é a rapidez com que a posição muda.";
+}
+
+if(tipo==="ace"){
+painel.innerHTML=
+"A aceleração permanece constante no MUV.";
+}
+
+if(tipo==="pos"){
+painel.innerHTML=
+"A posição segue uma função quadrática.";
+}
+
+if(tipo==="graf"){
+painel.innerHTML=
+"v×t = reta • s×t = parábola • a×t = constante";
+}
+
+}
+
+function calcular(){
+
+let v0 =
+parseFloat(document.getElementById("v0").value);
+
+let a =
+parseFloat(document.getElementById("a").value);
+
+let t =
+parseFloat(document.getElementById("t").value);
+
+let v = v0 + a*t;
+
+document.getElementById("resultado")
+.innerHTML =
+"Velocidade Final = " +
+v.toFixed(2) + " m/s";
+
+}
+
+const canvas =
+document.getElementById("canvas");
+
+const ctx =
+canvas.getContext("2d");
+
+function iniciar(){
+
+let tempo=0;
+
+let v0 =
+parseFloat(document.getElementById("simV0").value);
+
+let a =
+parseFloat(document.getElementById("simA").value);
+
+let anim = setInterval(()=>{
+
+ctx.clearRect(0,0,1000,220);
+
+let s =
+(v0*tempo)+
+(a*Math.pow(tempo,2))/2;
+
+ctx.fillStyle="#0057b8";
+
+ctx.beginPath();
+
+ctx.arc(
+50+s*3,
+110,
+15,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+tempo+=0.1;
+
+if(50+s*3 > 950){
+clearInterval(anim);
+}
+
+},30);
+
+}
+
+function desenharGrafico(){
+
+const c =
+document.getElementById("grafico");
+
+const g =
+c.getContext("2d");
+
+g.clearRect(0,0,c.width,c.height);
+
+g.strokeStyle="black";
+
+g.beginPath();
+g.moveTo(50,300);
+g.lineTo(950,300);
+g.stroke();
+
+g.beginPath();
+g.moveTo(50,20);
+g.lineTo(50,300);
+g.stroke();
+
+g.strokeStyle="red";
+g.beginPath();
+
+for(let t=0;t<=20;t+=0.1){
+
+let s=(2*t*t)/2;
+
+let x=50+t*40;
+let y=300-s*2;
+
+if(t===0)
+g.moveTo(x,y);
+else
+g.lineTo(x,y);
+
+}
+
+g.stroke();
+
+}
 
 function visao(tipo){
 
 const painel =
 document.getElementById("painelVisao");
 
-if(tipo==="profundidade"){
-painel.innerHTML =
-"👁️ A percepção de profundidade permite estimar distâncias entre objetos.";
+if(tipo==="prof"){
+painel.innerHTML=
+"👁️ A profundidade ajuda a perceber distância e espaço.";
 }
 
-if(tipo==="movimento"){
-painel.innerHTML =
-"🚗 O cérebro interpreta alterações de posição para perceber movimento.";
+if(tipo==="mov"){
+painel.innerHTML=
+"🎯 O cérebro detecta alterações de posição para identificar movimento.";
 }
 
 if(tipo==="velocidade"){
-painel.innerHTML =
-"⚡ Quanto maior a variação da posição em menos tempo, maior a velocidade percebida.";
+painel.innerHTML=
+"⚡ A velocidade é percebida pela variação da posição ao longo do tempo.";
 }
 
 }
 
-function mover(personagem){
+function mover(id){
 
-let elemento =
-document.getElementById(personagem);
+let obj =
+document.getElementById(id);
 
 let pos = 20;
 
 let velocidade = 5;
 
-if(personagem==="onca"){
-velocidade = 12;
-}
+if(id==="onca")
+velocidade=12;
 
-if(personagem==="humano"){
-velocidade = 8;
-}
+if(id==="humano")
+velocidade=8;
 
-if(personagem==="cadeirante"){
-velocidade = 6;
-}
+if(id==="cadeirante")
+velocidade=6;
 
-let anim = setInterval(()=>{
+let anim =
+setInterval(()=>{
 
 pos += velocidade;
 
-elemento.style.left = pos + "px";
+obj.style.left =
+pos+"px";
 
-if(pos > 800){
+if(pos > 900){
 clearInterval(anim);
 }
 
 },30);
 
-const descricao =
+let texto =
 document.getElementById("descricaoMobilidade");
 
-if(personagem==="cadeirante"){
-descricao.innerHTML =
+if(id==="cadeirante"){
+texto.innerHTML =
 "🧑‍🦽 Mobilidade assistida por cadeira de rodas.";
 }
 
-if(personagem==="onca"){
-descricao.innerHTML =
-"🐆 A onça representa deslocamento rápido e agilidade.";
+if(id==="onca"){
+texto.innerHTML =
+"🐆 Deslocamento rápido e ágil.";
 }
 
-if(personagem==="humano"){
-descricao.innerHTML =
-"🚶 Locomoção humana em velocidade moderada.";
+if(id==="humano"){
+texto.innerHTML =
+"🚶 Caminhada humana em velocidade moderada.";
 }
 
 }
+
+</script>
+
+</body>
+</html>
